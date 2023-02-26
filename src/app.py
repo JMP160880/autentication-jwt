@@ -253,14 +253,14 @@ def login():
 # without a valid JWT present.
 
 # ESTA PARTE ESTA PENDIENTE
-# @app.route("/protected", methods=["GET"])
-# @jwt_required()
-# def protected():
-#     # Access the identity of the current user with get_jwt_identity
-#     current_usuario = get_jwt_identity()
-#     usuario = Usuario.query.filter_by(email=current_usuario).first()
+@app.route("/protected", methods=["GET"])
+@jwt_required()
+def protected():
+    # Access the identity of the current user with get_jwt_identity
+     current_usuario = get_jwt_identity()
+     usuario = Usuario.query.filter_by(email=current_usuario).first()
     
-#     return jsonify({"result":usuario.serialize()}), 200
+     return jsonify({"result":usuario.serialize()}), 200
 
 # this only runs if `$ python src/app.py` is executed
 app.config["JWT_SECRET_KEY"] = "super-secret" # ¡Cambia las palabras "super-secret" por otra cosa!
