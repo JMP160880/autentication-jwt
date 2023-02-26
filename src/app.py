@@ -8,7 +8,7 @@ from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
 from admin import setup_admin
-from models import db, User , Personaje , Planeta
+from models import db, User , Personaje , Planeta , Favorito
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
@@ -181,7 +181,6 @@ def create_planeta():
 @app.route('/favorite/planeta/<int:planeta_id>', methods=['POST'])
 def create_planeta_favorito(planeta_id):
     request_body=request.json
-    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
     planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
 
     db.session.add(planeta_favorito)
@@ -196,7 +195,6 @@ def create_planeta_favorito(planeta_id):
 @app.route('/favorite/planeta/<int:planeta_id>', methods=['DELETE'])
 def delete_planeta_favorito(planeta_id):
     request_body=request.json
-    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
     planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
 
     db.session.delete(planeta_favorito)
@@ -211,7 +209,6 @@ def delete_planeta_favorito(planeta_id):
 @app.route('/favorite/personaje/<int:personaje_id>', methods=['POST'])
 def create_personaje_favorito(personaje_id):
     request_body=request.json
-    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
     personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
 
     db.session.add(personaje_favorito)
@@ -226,7 +223,6 @@ def create_personaje_favorito(personaje_id):
 @app.route('/favorite/personaje/<int:personaje_id>', methods=['DELETE'])
 def delete_personaje_favorito(personaje_id):
     request_body=request.json
-    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
     personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
 
     db.session.delete(personaje_favorito)
@@ -237,7 +233,7 @@ def delete_personaje_favorito(personaje_id):
         }
     return jsonify(response_body), 200
 
-
+# ----------------------------------JWT------------------------------------------
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
 @app.route("/login", methods=["POST"])
