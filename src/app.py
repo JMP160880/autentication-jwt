@@ -47,7 +47,6 @@ def handle_hello():
 
     users_query = User.query.all()
     results = list(map(lambda item: item.serialize(),users_query))
-    print(results)
 
     response_body = {
         "msg": "ok",
@@ -75,7 +74,7 @@ def create_user():
     if user_query is None:
 
         user = User(email=request_body["email"], 
-        password=request_body["password"])
+        password=request_body["password"],name=request_body["name"])
         db.session.add(user)
         db.session.commit()
   
@@ -177,6 +176,67 @@ def create_planeta():
         return jsonify(response_body), 200
     else:
         return jsonify({"msg":"Planeta ya existe"}), 400
+
+# CREAR PLANETA FAVORITO
+@app.route('/favorite/planeta/<int:planeta_id>', methods=['POST'])
+def create_planeta_favorito(planeta_id):
+    request_body=request.json
+    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
+    planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
+
+    db.session.add(planeta_favorito)
+    db.session.commit()
+  
+    response_body = {
+            "msg": "El planeta ha sido creado como favorito con éxito",
+        }
+    return jsonify(response_body), 200
+
+# BORRAR PLANETA FAVORITO
+@app.route('/favorite/planeta/<int:planeta_id>', methods=['DELETE'])
+def delete_planeta_favorito(planeta_id):
+    request_body=request.json
+    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
+    planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
+
+    db.session.delete(planeta_favorito)
+    db.session.commit()
+  
+    response_body = {
+            "msg": "El planeta ha sido eliminado como favorito con éxito",
+        }
+    return jsonify(response_body), 200
+
+# CREAR PERSONAJE FAVORITO
+@app.route('/favorite/personaje/<int:personaje_id>', methods=['POST'])
+def create_personaje_favorito(personaje_id):
+    request_body=request.json
+    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
+    personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
+
+    db.session.add(personaje_favorito)
+    db.session.commit()
+  
+    response_body = {
+            "msg": "El personaje ha sido creado como favorito con éxito",
+        }
+    return jsonify(response_body), 200
+
+# BORRAR PERSONAJE FAVORITO
+@app.route('/favorite/personaje/<int:personaje_id>', methods=['DELETE'])
+def delete_personaje_favorito(personaje_id):
+    request_body=request.json
+    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
+    personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
+
+    db.session.delete(personaje_favorito)
+    db.session.commit()
+  
+    response_body = {
+            "msg": "El personaje ha sido eliminado como favorito con éxito",
+        }
+    return jsonify(response_body), 200
+
 
 # Create a route to authenticate your users and return JWTs. The
 # create_access_token() function is used to actually generate the JWT.
