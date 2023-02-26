@@ -13,6 +13,7 @@ from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
+from flask_jwt_extended import jwt_required, get_jwt_identity
 #from models import Person
 
 app = Flask(__name__)
@@ -256,10 +257,10 @@ def login():
 @jwt_required()
 def protected():
     # Access the identity of the current user with get_jwt_identity
-    current_user = get_jwt_identity()
-    user = User.query.filter_by(email=current_user).first()
-    print(user)
-    return jsonify({"result":user.serialize()}), 200
+    current_usuario = get_jwt_identity()
+    usuario = Usuario.query.filter_by(email=current_usuario).first()
+    
+    return jsonify({"result":usuario.serialize()}), 200
 
 # this only runs if `$ python src/app.py` is executed
 if __name__ == '__main__':
