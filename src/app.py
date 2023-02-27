@@ -182,6 +182,7 @@ def create_planeta():
 @app.route('/favorite/planeta/<int:planeta_id>', methods=['POST'])
 def create_planeta_favorito(planeta_id):
     request_body=request.json
+   
     planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
 
     db.session.add(planeta_favorito)
@@ -196,9 +197,10 @@ def create_planeta_favorito(planeta_id):
 @app.route('/favorite/planeta/<int:planeta_id>', methods=['DELETE'])
 def delete_planeta_favorito(planeta_id):
     request_body=request.json
-    planeta_favorito = Favorito(usuario_id=request_body["usuario_id"],planeta_id = planeta_id)
+    
+    favorito_planeta_query = Favorito.query.filter_by(usuario_id=request_body["usuario_id"],planeta_id=planeta_id).first()
 
-    db.session.delete(planeta_favorito)
+    db.session.delete(favorito_planeta_query)
     db.session.commit()
   
     response_body = {
@@ -210,6 +212,7 @@ def delete_planeta_favorito(planeta_id):
 @app.route('/favorite/personaje/<int:personaje_id>', methods=['POST'])
 def create_personaje_favorito(personaje_id):
     request_body=request.json
+    # planeta_favorito = Planeta.query.filter_by(id=planeta_id).first()
     personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
 
     db.session.add(personaje_favorito)
@@ -224,9 +227,10 @@ def create_personaje_favorito(personaje_id):
 @app.route('/favorite/personaje/<int:personaje_id>', methods=['DELETE'])
 def delete_personaje_favorito(personaje_id):
     request_body=request.json
-    personaje_favorito = Favorito(usuario_id=request_body["usuario_id"],personaje_id = personaje_id)
 
-    db.session.delete(personaje_favorito)
+    favorito_personaje_query = Favorito.query.filter_by(usuario_id=request_body["usuario_id"],personaje_id=personaje_id).first()
+
+    db.session.delete(favorito_personaje_query)
     db.session.commit()
   
     response_body = {
@@ -235,8 +239,7 @@ def delete_personaje_favorito(personaje_id):
     return jsonify(response_body), 200
 
 # ----------------------------------JWT------------------------------------------
-# Create a route to authenticate your users and return JWTs. The
-# create_access_token() function is used to actually generate the JWT.
+# OBTENER TOKEN
 @app.route("/login", methods=["POST"])
 def login():
     email = request.json.get("email", None)
@@ -249,10 +252,7 @@ def login():
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)
 
-# Protect a route with jwt_required, which will kick out requests
-# without a valid JWT present.
-
-# ESTA PARTE ESTA PENDIENTE
+# VALIDAR TOKEN
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
@@ -263,7 +263,7 @@ def protected():
      return jsonify({"result":usuario.serialize()}), 200
 
 # this only runs if `$ python src/app.py` is executed
-app.config["JWT_SECRET_KEY"] = "super-secret" # ¡Cambia las palabras "super-secret" por otra cosa!
+app.config["JWT_SECRET_KEY"] = "super-secret" # 
 jwt = JWTManager(app)
 
 if __name__ == '__main__':
