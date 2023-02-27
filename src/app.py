@@ -258,7 +258,7 @@ def login():
 def protected():
     # Access the identity of the current user with get_jwt_identity
      current_usuario = get_jwt_identity()
-     usuario = Usuario.query.filter_by(email=current_usuario).first()
+     usuario = User.query.filter_by(email=current_usuario).first()
     
      return jsonify({"result":usuario.serialize()}), 200
 
