@@ -14,7 +14,6 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required, get_jwt_identity
-#from models import Person
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -256,7 +255,7 @@ def login():
 @app.route("/protected", methods=["GET"])
 @jwt_required()
 def protected():
-    # Access the identity of the current user with get_jwt_identity
+
      current_usuario = get_jwt_identity()
      usuario = User.query.filter_by(email=current_usuario).first()
     
